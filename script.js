@@ -12,9 +12,9 @@ try {
 // ? set default value if todos == null
 if (!todos) {
   todos = [
-    { content: "Shopping", status: true },
-    { content: "Watch videos", status: false },
-    { content: "Like videos", status: true },
+    { content: "reading book", status: true },
+    { content: "Watch videos", status: true },
+    { content: "Practicing programming", status: true },
   ];
   localStorage.setItem("todos", JSON.stringify(todos));
 }
@@ -69,6 +69,7 @@ Array.from(actions.children).forEach((action) => {
       formWrapper.innerHTML = `<form id="add">
         <input class="form-control" name="add" placeholder="Add todo ..">
       </form>`;
+      createTodos(todos);
       let add = document.querySelector("#add")
       add.addEventListener("submit" , e =>{
         e.preventDefault()
@@ -85,6 +86,17 @@ Array.from(actions.children).forEach((action) => {
       formWrapper.innerHTML = `<form id="search">
         <input class="form-control" name="search" placeholder="search todo ..">
       </form> `;
+      let search = document.querySelector("#search")
+      search.addEventListener("keyup" , e =>{
+        e.preventDefault()
+        if(search.search.value){
+         let filterd_todos = todos.filter(todo => todo.content.toLowerCase().includes(search.search.value.toLowerCase()))
+         createTodos(filterd_todos);
+        }else{
+         createTodos(todos);
+
+        }
+      })
     });
   }
 });
