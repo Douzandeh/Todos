@@ -11,7 +11,7 @@ try {
 
 // ? set default value if todos == null
 if (!todos) {
-  todos = ["Shopping", "Watch videos", "Like videos"];
+  todos = [{content: "Shopping" , status:true}, {content: "Watch videos" , status:false}, {content: "Like videos" , status:true}];
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
@@ -21,11 +21,12 @@ function createTodos(todos) {
   todosList.innerHTML = "";
 
   // ? create list tag for each todo
-  todos.forEach((todo , index) => {
+  todos.forEach((todo, index) => {
     let li = document.createElement("li");
     li.className = "list-group-item";
     let content = document.createElement("span");
-    content.textContent = todo;
+    content.style.textDecoration = todo.status ? "initial" : "line-through"
+    content.textContent = todo.content
     let deleteBtn = document.createElement("img");
     deleteBtn.src = "media/delete.png";
     deleteBtn.alt = "delete icon";
@@ -37,11 +38,20 @@ function createTodos(todos) {
 
     // ? append li to todosList
     todosList.append(li);
-    deleteBtn.addEventListener('click' , e =>{
-        todos.splice(index , 1)
+    // ? add deleteBtn functionality
+    deleteBtn.addEventListener("click", (e) => {
+      todos.splice(index, 1);
+      localStorage.setItem("todos", JSON.stringify(todos));
+      createTodos(todos);
+    });
+
+
+    // ? add complete functionality
+    content.addEventListener("click", (e) => {
+        todos[index].status = !todos[index].status
         localStorage.setItem("todos", JSON.stringify(todos));
-        createTodos(todos) 
-    })
+        createTodos(todos);
+      });
   });
 }
 createTodos(todos);
