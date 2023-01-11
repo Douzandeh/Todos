@@ -11,7 +11,11 @@ try {
 
 // ? set default value if todos == null
 if (!todos) {
-  todos = [{content: "Shopping" , status:true}, {content: "Watch videos" , status:false}, {content: "Like videos" , status:true}];
+  todos = [
+    { content: "Shopping", status: true },
+    { content: "Watch videos", status: false },
+    { content: "Like videos", status: true },
+  ];
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
@@ -25,8 +29,8 @@ function createTodos(todos) {
     let li = document.createElement("li");
     li.className = "list-group-item";
     let content = document.createElement("span");
-    content.style.textDecoration = todo.status ? "initial" : "line-through"
-    content.textContent = todo.content
+    content.style.textDecoration = todo.status ? "initial" : "line-through";
+    content.textContent = todo.content;
     let deleteBtn = document.createElement("img");
     deleteBtn.src = "media/delete.png";
     deleteBtn.alt = "delete icon";
@@ -45,13 +49,31 @@ function createTodos(todos) {
       createTodos(todos);
     });
 
-
     // ? add complete functionality
     content.addEventListener("click", (e) => {
-        todos[index].status = !todos[index].status
-        localStorage.setItem("todos", JSON.stringify(todos));
-        createTodos(todos);
-      });
+      todos[index].status = !todos[index].status;
+      localStorage.setItem("todos", JSON.stringify(todos));
+      createTodos(todos);
+    });
   });
 }
 createTodos(todos);
+
+// ? action add & search
+let actions = document.querySelector("#actions");
+let formWrapper = document.querySelector("#form-warapper");
+Array.from(actions.children).forEach((action) => {
+  if (action.dataset.action == "add") {
+    action.addEventListener("click", (e) => {
+      formWrapper.innerHTML = `<form id="add">
+        <input class="form-control" name="add" placeholder="Add todo ..">
+      </form>`;
+    });
+  } else if (action.dataset.action == "search") {
+    action.addEventListener("click", (e) => {
+      formWrapper.innerHTML = `<form id="search">
+        <input class="form-control" name="search" placeholder="search todo ..">
+      </form> `;
+    });
+  }
+});
